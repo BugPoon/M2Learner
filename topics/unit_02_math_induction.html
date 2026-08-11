@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學習單位 2：數學歸納法 互動學習平台</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for Beautiful Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #818cf8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Header Navigation -->
+    <header class="bg-gradient-to-r from-blue-700 via-blue-800 to-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white text-blue-700 p-2 rounded-lg font-bold text-xl shadow-inner">M1/M2</div>
+                    <div>
+                        <h1 class="text-lg font-bold leading-none">數學歸納法</h1>
+                        <p class="text-xs text-blue-200">Mathematical Induction</p>
+                    </div>
+                </div>
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('concept')" id="tab-btn-concept" class="tab-btn px-3 py-2 rounded-md text-sm font-medium bg-blue-900 text-white transition-all">📖 核心概念</button>
+                    <button onclick="switchTab('tool')" id="tab-btn-tool" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📈 數列與求和探索器</button>
+                    <button onclick="switchTab('practice')" id="tab-btn-practice" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📝 互動題庫</button>
+                    <button onclick="switchTab('mistake')" id="tab-btn-mistake" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">⚠️ 避坑與自檢</button>
+                </nav>
+            </div>
+        </div>
+        <!-- Mobile Navigation Bar -->
+        <div class="flex md:hidden bg-blue-900 border-t border-blue-800 overflow-x-auto justify-around text-xs custom-scrollbar">
+            <button onclick="switchTab('concept')" id="mob-tab-btn-concept" class="mob-tab-btn flex-1 py-3 text-center text-white font-medium bg-blue-950">概念</button>
+            <button onclick="switchTab('tool')" id="mob-tab-btn-tool" class="mob-tab-btn flex-1 py-3 text-center text-blue-200 font-medium hover:bg-blue-950">探索器</button>
+            <button onclick="switchTab('practice')" id="mob-tab-btn-practice" class="mob-tab-btn flex-1 py-3 text-center text-blue-200 font-medium hover:bg-blue-950">題庫</button>
+            <button onclick="switchTab('mistake')" id="mob-tab-btn-mistake" class="mob-tab-btn flex-1 py-3 text-center text-blue-200 font-medium hover:bg-blue-950">自檢</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- ==================== TAB 1: CONCEPT ==================== -->
+        <section id="tab-content-concept" class="tab-content block space-y-8 animate-fadeIn">
+            <!-- Hero Introduction -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-6">
+                <div class="flex-grow space-y-4">
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> 單元導言
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">為什麼要學「數學歸納法」？</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        我們無法窮舉無限多個正整數來證明一個數學命題。數學歸納法（Mathematical Induction）提供了一種強大的<strong>骨牌效應證明邏輯</strong>。只要證明第一張骨牌會倒下，並證明「如果第 $k$ 張骨牌倒下，必能推倒第 $k+1$ 張骨牌」，就能宣告整排無限的骨牌都會倒下！
+                        它是我們證明<strong>數列求和、整除性、不等式與矩陣次冪</strong>的終極武器。
+                    </p>
+                </div>
+                <div class="w-full md:w-80 flex-shrink-0 bg-blue-50 rounded-xl p-4 border border-blue-100 text-center">
+                    <p class="text-xs text-blue-600 uppercase font-semibold tracking-wider">歷史小故事</p>
+                    <p class="text-sm text-slate-700 italic mt-2">
+                        「1665 年，法國數學家<b>帕斯卡 (Blaise Pascal)</b> 在《算術三角論》中，首次明確而完整地闡述了數學歸納法的原理。他以此證明了帕斯卡三角形中二項式係數的各種奇妙性質，為現代代數奠定了基礎。」
+                    </p>
+                </div>
+            </div>
+
+            <!-- Formula Grid Section -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-1 h-6 bg-blue-600 rounded"></span>
+                    核心公式與原理記憶卡 (點擊解鎖)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1: 原理 -->
+                    <div onclick="openFormulaModal('principle')" class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-bars-staggered text-lg"></i>
+                            </span>
+                            <span class="text-xs text-slate-400">核心邏輯</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mt-4">歸納法兩大步</h4>
+                        <div class="text-slate-600 text-sm space-y-2 mt-2">
+                            1️⃣ <b>奠基步驟：</b> 證明 $P(1)$ 成立。<br>
+                            2️⃣ <b>歸納步驟：</b> 假設 $P(k)$ 成立，推證 $P(k+1)$ 也成立。
+                        </div>
+                        <p class="text-xs text-blue-600 font-semibold mt-4 flex items-center gap-1">
+                            查看嚴格書寫格式 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </p>
+                    </div>
+
+                    <!-- Card 2: 數列求和 -->
+                    <div onclick="openFormulaModal('summation')" class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-plus text-lg"></i>
+                            </span>
+                            <span class="text-xs text-slate-400">求和公式</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mt-4">常見冪和公式</h4>
+                        <div class="text-slate-600 text-sm space-y-3 mt-3">
+                            $$\sum_{r=1}^n r = \frac{n(n+1)}{2}$$  
+                            $$\sum_{r=1}^n r^2 = \frac{n(n+1)(2n+1)}{6}$$
+                        </div>
+                        <p class="text-xs text-blue-600 font-semibold mt-4 flex items-center gap-1">
+                            查看求和題型推導技巧 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </p>
+                    </div>
+
+                    <!-- Card 3: 整除性 -->
+                    <div onclick="openFormulaModal('divisibility')" class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <span class="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-divide text-lg"></i>
+                            </span>
+                            <span class="text-xs text-slate-400">整除與倍數</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mt-4">整除性模型</h4>
+                        <div class="text-slate-600 text-sm space-y-2 mt-2">
+                            若 $f(n)$ 可被 $M$ 整除，我們通常設：
+                            $$f(k) = M \cdot q \quad (q \in \mathbb{Z})$$
+                            目標證明：
+                            $$f(k+1) = M \cdot (\text{整數})$$
+                        </div>
+                        <p class="text-xs text-blue-600 font-semibold mt-4 flex items-center gap-1">
+                            解鎖湊項與抽離法 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formula Concept Card Modals -->
+            <div id="formula-detail-panel" class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-6 sm:p-8 space-y-4 animate-fadeIn">
+                <div class="flex justify-between items-start">
+                    <h4 id="panel-title" class="text-xl font-bold text-slate-900">公式詳解</h4>
+                    <button onclick="closeFormulaPanel()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div id="panel-content" class="text-slate-700 leading-relaxed space-y-4">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: SEQUENCE EXPLORER ==================== -->
+        <section id="tab-content-tool" class="tab-content hidden space-y-8 animate-fadeIn">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Control Panel -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-laptop-code text-blue-600"></i>
+                        數列與求和探索器
+                    </h3>
+                    <p class="text-xs text-slate-500">輸入一般項 $T_n$ 及範圍，系統將為你畫出數列的點座標圖象，並計算指定項數的總和。</p>
+                    
+                    <div class="space-y-4">
+                        <!-- General Term Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">一般項 $T_n$ (通項)</label>
+                            <input type="text" id="input-expr" value="n" placeholder="例如: n^2 或 2*n-1" class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p class="text-[10px] text-slate-400 mt-1">支援符號：用 <code>*</code> 表示乘，<code>^</code> 表示次方 (如 <code>n^2</code>)。</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Start N -->
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">起始項 ($a$)</label>
+                                <input type="number" id="input-start" value="1" min="1" class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <!-- End N -->
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">結束項 ($b$)</label>
+                                <input type="number" id="input-end" value="10" min="1" class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <button onclick="calculateSequence()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all">
+                            產生圖象與計算總和
+                        </button>
+                    </div>
+
+                    <!-- Computed Output Equations -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">運算結果</p>
+                        <div class="flex justify-between text-sm items-center">
+                            <span class="text-slate-600">$\sum_{n=a}^{b} T_n =$ </span>
+                            <span class="font-bold text-xl text-blue-700" id="calc-sum-result">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Graph Visualizer -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm lg:col-span-2 flex flex-col justify-between">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">座標幾何圖象</h3>
+                            <p class="text-xs text-slate-500">橫軸為項數 $n$，縱軸為該項數值 $T_n$</p>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Container -->
+                    <div class="relative bg-slate-50 rounded-xl border border-slate-200 overflow-hidden flex-grow min-h-[300px]">
+                        <canvas id="seqCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                        <!-- Tooltip -->
+                        <div id="seq-tooltip" class="absolute hidden bg-slate-900 text-white text-xs px-2.5 py-1.5 rounded-lg pointer-events-none shadow-md space-y-1 z-10">
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-400 mt-3">
+                        <i class="fa-solid fa-circle-info"></i> 在圖表上移動滑鼠以查看個別項 $(n, T_n)$ 的數值。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: PRACTICE ==================== -->
+        <!-- ==================== TAB 3: PRACTICE ==================== -->
+        <section id="tab-content-practice" class="tab-content hidden space-y-8 animate-fadeIn">
+            <!-- Level Selector Tabs -->
+            <div class="flex space-x-2 border-b border-slate-200 pb-px overflow-x-auto custom-scrollbar">
+                <button onclick="switchLevel('l1')" id="level-btn-l1" class="level-btn whitespace-nowrap py-2 px-4 font-semibold text-sm border-b-2 border-blue-600 text-blue-600 transition-all">🟢 Level 1 入門題 (1-5)</button>
+                <button onclick="switchLevel('l2')" id="level-btn-l2" class="level-btn whitespace-nowrap py-2 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 transition-all">🟡 Level 2 進階題 (6-10)</button>
+                <button onclick="switchLevel('l3')" id="level-btn-l3" class="level-btn whitespace-nowrap py-2 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 transition-all">🔴 Level 3 挑戰題 (11-13)</button>
+                <button onclick="switchLevel('l4')" id="level-btn-l4" class="level-btn whitespace-nowrap py-2 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 transition-all">⚫ Level 4 超階題 (14-16)</button>
+            </div>
+
+            <!-- ================= LEVEL 1 (Q1 - Q5) ================= -->
+            <div id="level-content-l1" class="level-pane block space-y-6">
+                <!-- Q1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 1 題 / 基礎等差求和</span>
+                        <span class="text-xs text-slate-400">Level 1 入門題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$：<br>
+                        $$1 + 2 + 3 + \dots + n = \frac{n(n+1)}{2}$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q1')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q1" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$1 + 2 + \dots + n = \frac{n(n+1)}{2}$」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= 1$<br>
+                        R.H.S. $= \frac{1(1+1)}{2} = 1$<br>
+                        $\because$ L.H.S. $=$ R.H.S.，$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>，即：<br>
+                        $$1 + 2 + \dots + k = \frac{k(k+1)}{2}$$</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = 1 + 2 + \dots + k + (k+1)$$
+                        $$= \frac{k(k+1)}{2} + (k+1)$$
+                        $$= (k+1) \left( \frac{k}{2} + 1 \right)$$
+                        $$= \frac{(k+1)(k+2)}{2} = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 也成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 2 題 / 平方和公式</span>
+                        <span class="text-xs text-slate-400">Level 1 入門題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$：<br>
+                        $$1^2 + 2^2 + 3^2 + \dots + n^2 = \frac{n(n+1)(2n+1)}{6}$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q2')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q2" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$1^2 + 2^2 + \dots + n^2 = \frac{n(n+1)(2n+1)}{6}$」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= 1^2 = 1$，R.H.S. $= \frac{1(2)(3)}{6} = 1$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = 1^2 + \dots + k^2 + (k+1)^2$$
+                        $$= \frac{k(k+1)(2k+1)}{6} + (k+1)^2$$
+                        抽出公因式 $(k+1)$：
+                        $$= (k+1) \left[ \frac{k(2k+1)}{6} + (k+1) \right]$$
+                        $$= (k+1) \left( \frac{2k^2+k+6k+6}{6} \right)$$
+                        $$= \frac{(k+1)(2k^2+7k+6)}{6}$$
+                        $$= \frac{(k+1)(k+2)(2k+3)}{6} = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 也成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 3 題 / 立方和公式</span>
+                        <span class="text-xs text-slate-400">Level 1 入門題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$：<br>
+                        $$1^3 + 2^3 + 3^3 + \dots + n^3 = \frac{n^2(n+1)^2}{4}$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q3')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q3" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為給定命題。</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= 1^3 = 1$，R.H.S. $= \frac{1^2(2)^2}{4} = 1$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = 1^3 + \dots + k^3 + (k+1)^3$$
+                        $$= \frac{k^2(k+1)^2}{4} + (k+1)^3$$
+                        抽出公因式 $(k+1)^2$：
+                        $$= (k+1)^2 \left( \frac{k^2}{4} + (k+1) \right)$$
+                        $$= (k+1)^2 \left( \frac{k^2+4k+4}{4} \right)$$
+                        $$= \frac{(k+1)^2(k+2)^2}{4} = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 也成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 4 題 / 相鄰項乘積求和</span>
+                        <span class="text-xs text-slate-400">Level 1 入門題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$：<br>
+                        $$1 \cdot 2 + 2 \cdot 3 + \dots + n(n+1) = \frac{n(n+1)(n+2)}{3}$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q4')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q4" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為給定命題。</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= 1 \cdot 2 = 2$，R.H.S. $= \frac{1(2)(3)}{3} = 2$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = \dots + k(k+1) + (k+1)(k+2)$$
+                        $$= \frac{k(k+1)(k+2)}{3} + (k+1)(k+2)$$
+                        抽出公因式 $(k+1)(k+2)$：
+                        $$= (k+1)(k+2) \left( \frac{k}{3} + 1 \right)$$
+                        $$= \frac{(k+1)(k+2)(k+3)}{3} = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 也成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 5 題 / 分數型求和 (部分分式法結構)</span>
+                        <span class="text-xs text-slate-400">Level 1 入門題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$：<br>
+                        $$\frac{1}{1 \cdot 2} + \frac{1}{2 \cdot 3} + \dots + \frac{1}{n(n+1)} = \frac{n}{n+1}$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q5')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q5" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為給定命題。</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= \frac{1}{1 \cdot 2} = \frac{1}{2}$，R.H.S. $= \frac{1}{1+1} = \frac{1}{2}$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = \dots + \frac{1}{k(k+1)} + \frac{1}{(k+1)(k+2)}$$
+                        $$= \frac{k}{k+1} + \frac{1}{(k+1)(k+2)}$$
+                        通分合併 (分母為 $(k+1)(k+2)$)：
+                        $$= \frac{k(k+2) + 1}{(k+1)(k+2)}$$
+                        $$= \frac{k^2+2k+1}{(k+1)(k+2)} = \frac{(k+1)^2}{(k+1)(k+2)}$$
+                        約去一個 $(k+1)$：
+                        $$= \frac{k+1}{k+2} = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 也成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= LEVEL 2 (Q6 - Q10) ================= -->
+            <div id="level-content-l2" class="level-pane hidden space-y-6">
+                <!-- Q6 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 6 題 / 整除性問題 (DSE 級別)</span>
+                        <span class="text-xs text-slate-400">Level 2 進階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$，<br>
+                        $3^{2n} - 1$ 可被 $8$ 整除。
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('hint-q6')" class="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 transition-all">💡 老師提示</button>
+                        <button onclick="toggleSolution('sol-q6')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="hint-q6" class="hidden p-4 bg-amber-50 border border-amber-100 rounded-xl text-slate-700 text-sm leading-relaxed">
+                        <strong>湊項法提示：</strong> 遇到 $3^{2(k+1)}$ 時，先將它拆解為 $3^{2k} \cdot 3^2 = 9 \cdot 3^{2k}$。然後強行抽出 $(3^{2k} - 1)$ 這個假設結構。
+                    </div>
+                    <div id="sol-q6" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$3^{2n} - 1$ 可被 8 整除」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        $3^2 - 1 = 8$，可被 8 整除。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。<br>
+                        即 $3^{2k} - 1 = 8M$ (其中 $M$ 為整數)，故 $3^{2k} = 8M + 1$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$3^{2(k+1)} - 1 = 9(3^{2k}) - 1$$
+                        $$= 9(8M + 1) - 1$$
+                        $$= 72M + 9 - 1 = 72M + 8 = 8(9M + 1)$$
+                        因為 $M$ 為整數，所以 $9M+1$ 也是整數，這代表算式可被 8 整除，$\therefore P(k+1)$ 成立。 <br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 7 題 / 單一指數型整除</span>
+                        <span class="text-xs text-slate-400">Level 2 進階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$，<br>
+                        $5^n + 3$ 可被 $4$ 整除。
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q7')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q7" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$5^n + 3$ 可被 4 整除」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        $5^1 + 3 = 8 = 4(2)$，可被 4 整除。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。<br>
+                        即 $5^k + 3 = 4M$ (其中 $M$ 為整數)，故 $5^k = 4M - 3$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$5^{k+1} + 3 = 5 \cdot 5^k + 3$$
+                        $$= 5(4M - 3) + 3$$
+                        $$= 20M - 15 + 3 = 20M - 12$$
+                        $$= 4(5M - 3)$$
+                        由於 $5M-3$ 是整數，故可被 4 整除。
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 8 題 / 多項式型整除</span>
+                        <span class="text-xs text-slate-400">Level 2 進階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$，<br>
+                        $n^3 - n$ 可被 $3$ 整除。
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q8')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q8" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$n^3 - n$ 可被 3 整除」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        $1^3 - 1 = 0 = 3(0)$，可被 3 整除。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。<br>
+                        即 $k^3 - k = 3M$ (其中 $M$ 為整數)。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$(k+1)^3 - (k+1)$$
+                        $$= (k^3 + 3k^2 + 3k + 1) - k - 1$$
+                        重新排列，湊出歸納假設的 $k^3 - k$：
+                        $$= (k^3 - k) + 3k^2 + 3k$$
+                        $$= 3M + 3(k^2 + k)$$
+                        $$= 3(M + k^2 + k)$$
+                        由於 $M + k^2 + k$ 是整數，故可被 3 整除。
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 9 題 / 混合型 (指數+多項式)</span>
+                        <span class="text-xs text-slate-400">Level 2 進階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$，<br>
+                        $4^n + 15n - 1$ 可被 $9$ 整除。
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q9')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q9" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為該命題。</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        $4^1 + 15(1) - 1 = 18 = 9(2)$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。<br>
+                        即 $4^k + 15k - 1 = 9M$，故 $4^k = 9M - 15k + 1$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$4^{k+1} + 15(k+1) - 1$$
+                        $$= 4(4^k) + 15k + 14$$
+                        代入假設：
+                        $$= 4(9M - 15k + 1) + 15k + 14$$
+                        $$= 36M - 60k + 4 + 15k + 14$$
+                        $$= 36M - 45k + 18$$
+                        $$= 9(4M - 5k + 2)$$
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 10 題 / 雙指數型整除</span>
+                        <span class="text-xs text-slate-400">Level 2 進階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$，<br>
+                        $8^n - 3^n$ 可被 $5$ 整除。
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q10')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q10" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為該命題。</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        $8^1 - 3^1 = 5$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。<br>
+                        即 $8^k - 3^k = 5M$，故 $8^k = 5M + 3^k$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$8^{k+1} - 3^{k+1} = 8(8^k) - 3(3^k)$$
+                        $$= 8(5M + 3^k) - 3(3^k)$$
+                        $$= 40M + 8 \cdot 3^k - 3 \cdot 3^k$$
+                        $$= 40M + 5 \cdot 3^k$$
+                        $$= 5(8M + 3^k)$$
+                        由於 $8M + 3^k$ 為整數，因此式子可被 5 整除。
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= LEVEL 3 (Q11 - Q13) ================= -->
+            <div id="level-content-l3" class="level-pane hidden space-y-6">
+                <!-- Q11 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 11 題 / 指數與多項式不等式</span>
+                        <span class="text-xs text-slate-400">Level 3 挑戰題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有整數 $n \ge 4$：<br>
+                        $$2^n \ge n^2$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q11')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q11" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$2^n \ge n^2$」</p>
+                        <p><strong>(1) 當 $n = 4$ 時：</strong><br>
+                        L.H.S. $= 2^4 = 16$，R.H.S. $= 4^2 = 16$<br>
+                        L.H.S. $\ge$ R.H.S.，所以 $P(4)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>（其中 $k \ge 4$）。即 $2^k \ge k^2$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = 2^{k+1} = 2 \cdot 2^k \ge 2k^2 = k^2 + k^2$$
+                        由於 $k \ge 4$，必有 $k^2 = k \cdot k \ge 4k = 2k + 2k > 2k + 1$。<br>
+                        因此：$k^2 + k^2 > k^2 + 2k + 1 = (k+1)^2 = \text{R.H.S.}$<br>
+                        所以 $2^{k+1} \ge (k+1)^2$，即 $P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>                        $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 12 題 / 階乘不等式</span>
+                        <span class="text-xs text-slate-400">Level 3 挑戰題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有整數 $n \ge 4$：<br>
+                        $$n! > 2^n$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q12')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q12" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$n! > 2^n$」</p>
+                        <p><strong>(1) 當 $n = 4$ 時：</strong><br>
+                        L.H.S. $= 4! = 24$，R.H.S. $= 2^4 = 16$。<br>
+                        $24 > 16$，$\therefore P(4)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>（$k \ge 4$）。即 $k! > 2^k$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = (k+1)! = (k+1) \cdot k!$$
+                        利用歸納假設 $k! > 2^k$：
+                        $$(k+1) \cdot k! > (k+1) \cdot 2^k$$
+                        因為 $k \ge 4$，所以 $k+1 \ge 5 > 2$：
+                        $$(k+1) \cdot 2^k > 2 \cdot 2^k = 2^{k+1} = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q13 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 13 題 / 伯努利不等式 (Bernoulli's Inequality)</span>
+                        <span class="text-xs text-slate-400">Level 3 挑戰題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        已知 $x > 0$。利用數學歸納法證明，對於所有正整數 $n$：<br>
+                        $$(1+x)^n \ge 1+nx$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q13')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q13" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$(1+x)^n \ge 1+nx$」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= 1+x$，R.H.S. $= 1+x$。$1+x \ge 1+x$，$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。即 $(1+x)^k \ge 1+kx$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = (1+x)^{k+1} = (1+x)^k(1+x)$$
+                        因為 $x > 0$，所以 $1+x > 0$，可直接將歸納假設乘入且不改變不等號方向：
+                        $$\ge (1+kx)(1+x)$$
+                        $$= 1 + x + kx + kx^2 = 1 + (k+1)x + kx^2$$
+                        由於 $kx^2 \ge 0$，因此：
+                        $$1 + (k+1)x + kx^2 \ge 1 + (k+1)x = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= LEVEL 4 (Q14 - Q16) ================= -->
+            <div id="level-content-l4" class="level-pane hidden space-y-6">
+                <!-- Q14 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">第 14 題 / 矩陣次冪</span>
+                        <span class="text-xs text-slate-400">Level 4 超階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        已知矩陣 $A = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$。<br>
+                        證明對於所有正整數 $n$：$$A^n = \begin{pmatrix} 1 & n \\ 0 & 1 \end{pmatrix}$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q14')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q14" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$A^n = \begin{pmatrix} 1 & n \\ 0 & 1 \end{pmatrix}$」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        $A^1 = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$，符合公式，$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>：<br>
+                        $$A^k = \begin{pmatrix} 1 & k \\ 0 & 1 \end{pmatrix}$$</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$A^{k+1} = A^k \cdot A$$
+                        代入假設：
+                        $$= \begin{pmatrix} 1 & k \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$$
+                        $$= \begin{pmatrix} (1)(1)+(k)(0) & (1)(1)+(k)(1) \\ (0)(1)+(1)(0) & (0)(1)+(1)(1) \end{pmatrix}$$
+                        $$= \begin{pmatrix} 1 & k+1 \\ 0 & 1 \end{pmatrix}$$
+                        $\therefore P(k+1)$ 也成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q15 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">第 15 題 / 遞迴數列一般項證明</span>
+                        <span class="text-xs text-slate-400">Level 4 超階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        已知數列 $\{a_n\}$ 滿足遞迴關係式 $a_1 = 1$，且對於所有正整數 $n$ 有 $a_{n+1} = 2a_n + 1$。<br>
+                        利用數學歸納法證明，對於所有正整數 $n$：$$a_n = 2^n - 1$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q15')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q15" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$a_n = 2^n - 1$」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        依據公式 R.H.S. $= 2^1 - 1 = 1$。已知 $a_1 = 1$。$\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>，即 $a_k = 2^k - 1$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        根據遞迴定義：
+                        $$a_{k+1} = 2a_k + 1$$
+                        代入歸納假設：
+                        $$= 2(2^k - 1) + 1$$
+                        $$= 2^{k+1} - 2 + 1$$
+                        $$= 2^{k+1} - 1$$
+                        此式與公式的結構一致，
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+
+                <!-- Q16 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">第 16 題 / 棣美弗定理 (De Moivre's Theorem)</span>
+                        <span class="text-xs text-slate-400">Level 4 超階題</span>
+                    </div>
+                    <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                        利用數學歸納法證明，對於所有正整數 $n$ 及實數 $\theta$：<br>
+                        $$(\cos \theta + i \sin \theta)^n = \cos(n\theta) + i \sin(n\theta)$$
+                    </h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleSolution('sol-q16')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all">🔑 顯示解答</button>
+                    </div>
+                    <div id="sol-q16" class="hidden p-5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm space-y-4 leading-relaxed">
+                        <p>設 $P(n)$ 為命題：「$(\cos \theta + i \sin \theta)^n = \cos(n\theta) + i \sin(n\theta)$」</p>
+                        <p><strong>(1) 當 $n = 1$ 時：</strong><br>
+                        L.H.S. $= (\cos \theta + i \sin \theta)^1 = \cos \theta + i \sin \theta$<br>
+                        R.H.S. $= \cos(1\theta) + i \sin(1\theta) = \cos \theta + i \sin \theta$<br>
+                        $\therefore P(1)$ 成立。</p>
+                        <p><strong>(2) 假設當 $n = k$ 時 $P(k)$ 成立</strong>。<br>
+                        即 $(\cos \theta + i \sin \theta)^k = \cos(k\theta) + i \sin(k\theta)$。</p>
+                        <p><strong>(3) 當 $n = k+1$ 時：</strong><br>
+                        $$\text{L.H.S.} = (\cos \theta + i \sin \theta)^{k+1}$$
+                        $$= (\cos \theta + i \sin \theta)^k (\cos \theta + i \sin \theta)$$
+                        代入歸納假設：
+                        $$= (\cos(k\theta) + i \sin(k\theta)) (\cos \theta + i \sin \theta)$$
+                        將括號展開（注意 $i^2 = -1$）：
+                        $$= \cos(k\theta)\cos \theta + i\cos(k\theta)\sin \theta + i\sin(k\theta)\cos \theta - \sin(k\theta)\sin \theta$$
+                        整合實部與虛部：
+                        $$= [\cos(k\theta)\cos \theta - \sin(k\theta)\sin \theta] + i[\sin(k\theta)\cos \theta + \cos(k\theta)\sin \theta]$$
+                        利用三角函數的複角公式 (Compound Angle Formula)：
+                        $$= \cos(k\theta + \theta) + i \sin(k\theta + \theta)$$
+                        $$= \cos((k+1)\theta) + i \sin((k+1)\theta) = \text{R.H.S.}$$
+                        $\therefore P(k+1)$ 成立。<br>
+                        $\therefore$ 根據數學歸納法，$P(n)$ 對所有正整數 $n$ 皆成立。 $\blacksquare$</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: MISTAKE & CHECK ==================== -->
+        <section id="tab-content-mistake" class="tab-content hidden space-y-8 animate-fadeIn">
+            <!-- Mind Trap Section -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-1 h-6 bg-rose-500 rounded"></span>
+                    思想陷阱 (常犯錯誤)
+                </h3>
+                <div class="space-y-4">
+                    <!-- Trap 1 -->
+                    <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button onclick="toggleTrap('trap-1')" class="w-full px-6 py-4 flex justify-between items-center bg-slate-50 border-b border-slate-100 text-left hover:bg-blue-50 transition-all">
+                            <span class="font-bold text-slate-800 flex items-center gap-2">
+                                <span class="bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded text-xs">陷阱 1</span>
+                                致命用詞：「Let n=k」與「Assume P(k) is true」的差別
+                            </span>
+                            <i id="icon-trap-1" class="fa-solid fa-chevron-down text-slate-400"></i>
+                        </button>
+                        <div id="content-trap-1" class="hidden p-6 space-y-3 text-sm leading-relaxed text-slate-600">
+                            <p class="text-rose-600 font-semibold"><i class="fa-solid fa-xmark"></i> 錯誤行為：</p>
+                            <p class="bg-rose-50 p-3 rounded-lg text-slate-700 border border-rose-100">
+                                很多學生在第二步只寫 "Let $n=k$ : $1+2+ \dots + k = \dots$"，然後就接著寫 $n=k+1$ 的推導。
+                            </p>
+                            <p class="text-emerald-600 font-semibold mt-4"><i class="fa-solid fa-check"></i> 老師糾偏：</p>
+                            <p class="bg-emerald-50 p-3 rounded-lg text-slate-700 border border-emerald-100">
+                                "Let $n=k$" 只是把字母換掉，並沒有「假設成立」的意思！在 DSE 評分標準中，如果沒有寫 <strong>"Assume $P(k)$ is true"（假設命題對於 $n=k$ 成立）</strong>，整個第二步及第三步的邏輯基礎就崩潰了，會被嚴重扣分！
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Trap 2 -->
+                    <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button onclick="toggleTrap('trap-2')" class="w-full px-6 py-4 flex justify-between items-center bg-slate-50 border-b border-slate-100 text-left hover:bg-blue-50 transition-all">
+                            <span class="font-bold text-slate-800 flex items-center gap-2">
+                                <span class="bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded text-xs">陷阱 2</span>
+                                代入 $k+1$ 時忘記加括號
+                            </span>
+                            <i id="icon-trap-2" class="fa-solid fa-chevron-down text-slate-400"></i>
+                        </button>
+                        <div id="content-trap-2" class="hidden p-6 space-y-3 text-sm leading-relaxed text-slate-600">
+                            <p class="text-rose-600 font-semibold"><i class="fa-solid fa-xmark"></i> 錯誤行為：</p>
+                            <p class="bg-rose-50 p-3 rounded-lg text-slate-700 border border-rose-100">
+                                原數列的一般項是 $2n-1$。當 $n=k+1$ 時，學生寫成 $2k+1-1 = 2k$。
+                            </p>
+                            <p class="text-emerald-600 font-semibold mt-4"><i class="fa-solid fa-check"></i> 老師糾偏：</p>
+                            <p class="bg-emerald-50 p-3 rounded-lg text-slate-700 border border-emerald-100">
+                                $n$ 是一個整體。代入 $k+1$ 時，必須把 $n$ 換成 $(k+1)$。<br>
+                                正確寫法：$2(k+1)-1 = 2k+2-1 = \mathbf{2k+1}$。<br>
+                                這是一元代數中最容易不小心粗心的地方。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Self Reflection Table Card -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-blue-600"></i>
+                    自我反思檢核表 (本地進度存檔)
+                </h3>
+                <p class="text-xs text-slate-500">檢視你是否完整掌握 M.I. 的重點要求，打勾進度會自動保存於瀏覽器。</p>
+                <div class="space-y-3">
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer">
+                        <input type="checkbox" id="chk-1" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我能夠清楚寫出 $P(1)$ 成立的證明，並分開標示 L.H.S. 和 R.H.S.。</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer">
+                        <input type="checkbox" id="chk-2" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我絕對不會忘記寫下「假設 $P(k)$ 成立」(Assume $P(k)$ is true)。</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer">
+                        <input type="checkbox" id="chk-3" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">在證明 $P(k+1)$ 時，我懂得如何正確地引用並代入 $P(k)$ 的結果。</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer">
+                        <input type="checkbox" id="chk-4" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我在題目的最後必定會寫上「由數學歸納法原理...」的完整結論字句。</span>
+                    </label>
+                </div>
+                <!-- Progress bar -->
+                <div class="pt-4 border-t border-slate-100">
+                    <div class="flex justify-between items-center text-xs text-slate-500 mb-1">
+                        <span>自我掌握進度</span>
+                        <span class="font-bold text-blue-600" id="progress-text">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts Section -->
+    <script>
+        // Tab switching logic
+        function switchTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
+
+            const desktopBtns = document.querySelectorAll('.tab-btn');
+            desktopBtns.forEach(btn => {
+                btn.classList.remove('bg-blue-900', 'text-white');
+                btn.classList.add('hover:bg-blue-600', 'hover:text-white', 'text-blue-100');
+            });
+            const activeDesktopBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeDesktopBtn) {
+                activeDesktopBtn.classList.remove('hover:bg-blue-600', 'hover:text-white', 'text-blue-100');
+                activeDesktopBtn.classList.add('bg-blue-900', 'text-white');
+            }
+
+            const mobileBtns = document.querySelectorAll('.mob-tab-btn');
+            mobileBtns.forEach(btn => {
+                btn.classList.remove('bg-blue-950', 'text-white');
+                btn.classList.add('text-blue-200', 'hover:bg-blue-950');
+            });
+            const activeMobileBtn = document.getElementById(`mob-tab-btn-${tabId}`);
+            if (activeMobileBtn) {
+                activeMobileBtn.classList.remove('text-blue-200', 'hover:bg-blue-950');
+                activeMobileBtn.classList.add('bg-blue-950', 'text-white');
+            }
+
+            if (tabId === 'tool') {
+                setTimeout(() => {
+                    initSeqCanvas();
+                    calculateSequence();
+                }, 100);
+            }
+        }
+
+        function switchLevel(levelId) {
+            const panes = document.querySelectorAll('.level-pane');
+            panes.forEach(pane => pane.classList.add('hidden'));
+            document.getElementById(`level-content-${levelId}`).classList.remove('hidden');
+
+            const levelBtns = document.querySelectorAll('.level-btn');
+            levelBtns.forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-blue-600');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+            const activeBtn = document.getElementById(`level-btn-${levelId}`);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-blue-600', 'text-blue-600');
+        }
+
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            el.classList.toggle('hidden');
+        }
+
+        function toggleHint(hintId) {
+            const el = document.getElementById(hintId);
+            el.classList.toggle('hidden');
+        }
+
+        function toggleTrap(trapId) {
+            const content = document.getElementById(`content-${trapId}`);
+            const icon = document.getElementById(`icon-${trapId}`);
+            content.classList.toggle('hidden');
+            if (content.classList.contains('hidden')) {
+                icon.className = "fa-solid fa-chevron-down text-slate-400";
+            } else {
+                icon.className = "fa-solid fa-chevron-up text-slate-400";
+            }
+        }
+
+        // Concept Cards Data
+        const formulaData = {
+            principle: {
+                title: "數學歸納法的嚴格書寫格式",
+                content: `
+                    <p>在考試中，格式與邏輯同樣重要，缺少任何一句都可能失分：</p>
+                    <ul class="list-decimal list-inside space-y-2 bg-blue-50 p-4 rounded-xl text-sm">
+                        <li><strong>定義命題：</strong> Let $P(n)$ be the proposition "..."。</li>
+                        <li><strong>奠基：</strong> For $n = 1$, L.H.S = ..., R.H.S = ... <br> $\\therefore P(1)$ is true.</li>
+                        <li><strong>假設：</strong> <b>Assume $P(k)$ is true</b> for some positive integer $k$.</li>
+                        <li><strong>推證：</strong> For $n = k+1$, L.H.S = ... (代入假設) ... = R.H.S <br> $\\therefore P(k+1)$ is true.</li>
+                        <li><strong>結論：</strong> By the principle of mathematical induction, $P(n)$ is true for all positive integers $n$.</li>
+                    </ul>
+                `
+            },
+            summation: {
+                title: "數列求和題型技巧",
+                content: `
+                    <p>在推導 $n=k+1$ 的時候，有一個絕對原則：<strong>「必定會將前面的 $k$ 項合併為假設中的結果」</strong>。</p>
+                    <p>$$S_{k+1} = \\underbrace{T_1 + T_2 + \\dots + T_k}_{S_k} + T_{k+1}$$</p>
+                    <p>下一步，通常是利用代數技巧，<strong>抽出公因式</strong> (Factorize)，而不是把所有東西展開！展開高次方多項式很容易算錯，尋找公因式是 M2 學生應具備的直覺。</p>
+                `
+            },
+            divisibility: {
+                title: "整除性：湊項與抽離法",
+                content: `
+                    <p>如果我們要證明 $f(k+1)$ 可以被 $M$ 整除，已知 $f(k) = M \\cdot q$。</p>
+                    <p>技巧是強制在 $f(k+1)$ 裡面「湊出」 $f(k)$ 的樣子。例如：</p>
+                    $$5^{k+1} - 1 = 5 \\cdot 5^k - 1$$
+                    $$= 5 \\cdot (5^k - 1 + 1) - 1$$
+                    $$= 5 \\cdot (5^k - 1) + 5 - 1 = 5 \\cdot (5^k - 1) + 4$$
+                    <p>這樣就能直接把假設的結構 $5^k-1$ 替換進去了！</p>
+                `
+            }
+        };
+
+        function openFormulaModal(type) {
+            const data = formulaData[type];
+            document.getElementById('panel-title').innerText = data.title;
+            document.getElementById('panel-content').innerHTML = data.content;
+            const panel = document.getElementById('formula-detail-panel');
+            panel.classList.remove('hidden');
+            
+            // Re-render math inside the newly opened modal
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(panel, { 
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true}, 
+                        {left: "$", right: "$", display: false},
+                        {left: "\\(", right: "\\)", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeFormulaPanel() {
+            document.getElementById('formula-detail-panel').classList.add('hidden');
+        }
+
+        // ==================== SEQUENCE EXPLORER ====================
+        const seqCanvas = document.getElementById('seqCanvas');
+        let ctx = null;
+        let seqData = []; 
+        let hoverPoint = null;
+
+        function initSeqCanvas() {
+            ctx = seqCanvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            seqCanvas.addEventListener('mousemove', (e) => {
+                const rect = seqCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                let minDist = 15; 
+                hoverPoint = null;
+
+                seqData.forEach(pt => {
+                    const px = mapX(pt.x);
+                    const py = mapY(pt.y);
+                    const dist = Math.sqrt((mouseX-px)**2 + (mouseY-py)**2);
+                    if(dist < minDist) {
+                        minDist = dist;
+                        hoverPoint = pt;
+                    }
+                });
+                drawGraph();
+            });
+
+            seqCanvas.addEventListener('mouseleave', () => {
+                hoverPoint = null;
+                drawGraph();
+            });
+        }
+
+        function resizeCanvas() {
+            const container = seqCanvas.parentElement;
+            seqCanvas.width = container.clientWidth;
+            seqCanvas.height = Math.max(300, container.clientHeight);
+            drawGraph();
+        }
+
+        let minX = 0, maxX = 10, minY = 0, maxY = 10;
+        const pad = 40;
+
+        function mapX(x) {
+            if(maxX === minX) return pad + (seqCanvas.width - pad*2)/2;
+            return pad + ((x - minX) / (maxX - minX)) * (seqCanvas.width - pad*2);
+        }
+
+        function mapY(y) {
+            let actualMinY = Math.min(0, minY);
+            let actualMaxY = Math.max(0, maxY);
+            if(actualMaxY === actualMinY) return seqCanvas.height/2;
+            return seqCanvas.height - pad - ((y - actualMinY) / (actualMaxY - actualMinY)) * (seqCanvas.height - pad*2);
+        }
+
+        function calculateSequence() {
+            let exprRaw = document.getElementById('input-expr').value;
+            let start = parseInt(document.getElementById('input-start').value);
+            let end = parseInt(document.getElementById('input-end').value);
+
+            let expr = exprRaw.replace(/\^/g, '**');
+
+            seqData = [];
+            let sum = 0;
+
+            if(isNaN(start) || isNaN(end) || start > end) {
+                document.getElementById('calc-sum-result').innerText = "範圍錯誤";
+                return;
+            }
+
+            try {
+                let fn = new Function('n', 'return ' + expr);
+                fn(1); 
+
+                for(let i = start; i <= end; i++) {
+                    let val = fn(i);
+                    sum += val;
+                    if(i - start < 100) {
+                        seqData.push({x: i, y: val});
+                    }
+                }
+                document.getElementById('calc-sum-result').innerText = sum.toLocaleString();
+
+                minX = start;
+                maxX = Math.min(end, start + 99);
+                minY = Math.min(...seqData.map(d=>d.y));
+                maxY = Math.max(...seqData.map(d=>d.y));
+
+                drawGraph();
+            } catch (e) {
+                document.getElementById('calc-sum-result').innerText = "表達式語法錯誤";
+            }
+        }
+
+        function drawGraph() {
+            if(!ctx) return;
+            ctx.clearRect(0, 0, seqCanvas.width, seqCanvas.height);
+
+            if(seqData.length === 0) return;
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            
+            let zeroY = mapY(0);
+            if(zeroY >= pad && zeroY <= seqCanvas.height - pad) {
+                ctx.beginPath();
+                ctx.moveTo(pad, zeroY);
+                ctx.lineTo(seqCanvas.width - pad, zeroY);
+                ctx.stroke();
+            }
+
+            ctx.strokeStyle = '#bfdbfe';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            seqData.forEach((pt, i) => {
+                let px = mapX(pt.x);
+                let py = mapY(pt.y);
+                if(i===0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
+
+            seqData.forEach(pt => {
+                let px = mapX(pt.x);
+                let py = mapY(pt.y);
+                ctx.beginPath();
+                ctx.arc(px, py, 4, 0, Math.PI*2);
+                ctx.fillStyle = (hoverPoint && hoverPoint.x === pt.x) ? '#ef4444' : '#3b82f6';
+                ctx.fill();
+            });
+
+            const tooltip = document.getElementById('seq-tooltip');
+            if(hoverPoint) {
+                tooltip.classList.remove('hidden');
+                let px = mapX(hoverPoint.x);
+                
+                let tooltipW = 100;
+                let tLeft = px + 10;
+                if(tLeft + tooltipW > seqCanvas.width) tLeft = px - tooltipW - 10;
+                
+                tooltip.style.left = `${tLeft}px`;
+                tooltip.style.top = `${mapY(hoverPoint.y) - 30}px`;
+                tooltip.innerHTML = `n = ${hoverPoint.x}<br>T<sub>n</sub> = ${Number.isInteger(hoverPoint.y) ? hoverPoint.y : hoverPoint.y.toFixed(4)}`;
+            } else {
+                tooltip.classList.add('hidden');
+            }
+        }
+
+        // ==================== CHECKLIST LOGIC ====================
+        function saveProgress() {
+            const checks = ['chk-1', 'chk-2', 'chk-3', 'chk-4'];
+            let checkedCount = 0;
+            checks.forEach(id => {
+                const el = document.getElementById(id);
+                localStorage.setItem(id, el.checked);
+                if (el.checked) checkedCount++;
+            });
+            const pct = Math.round((checkedCount / checks.length) * 100);
+            document.getElementById('progress-text').innerText = `${pct}%`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        function loadProgress() {
+            const checks = ['chk-1', 'chk-2', 'chk-3', 'chk-4'];
+            checks.forEach(id => {
+                if (localStorage.getItem(id) === 'true') {
+                    document.getElementById(id).checked = true;
+                }
+            });
+            saveProgress();
+        }
+
+        // ==================== INITIALIZATION ====================
+        // 將所有初始化確保在 DOM 完全準備好後再執行，避免 null 錯誤
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. 初始化 KaTeX 數學公式渲染
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "$", right: "$", display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+            
+            // 2. 載入本地進度條
+            loadProgress();
+        });
+    </script>
+</body>
+</html>
