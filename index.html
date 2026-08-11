@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKDSE M2 互動學習平台</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Header Navigation -->
+    <header class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white text-indigo-700 p-2 rounded-lg font-bold text-xl shadow-inner">M2</div>
+                    <div>
+                        <h1 class="text-lg font-bold leading-none">代數與微積分</h1>
+                        <p class="text-xs text-indigo-200">HKDSE Mathematics Extended Part Module 2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">單元目錄</h2>
+            <p class="text-slate-600">請選擇下方學習單位以進入互動學習平台與題庫。</p>
+        </div>
+
+        <!-- Topics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Unit 1 -->
+            <a href="topics/unit_01_odd_even_functions.html" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all group block">
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600">學習單位 1：奇函數和偶函數</h3>
+                <p class="text-sm text-slate-500">基礎知識模塊</p>
+            </a>
+
+            <!-- Unit 2 -->
+            <a href="topics/unit_02_math_induction.html" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all group block">
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600">學習單位 2：數學歸納法</h3>
+                <p class="text-sm text-slate-500">基礎知識模塊</p>
+            </a>
+
+            <!-- Unit 3 -->
+            <a href="topics/unit_03_binomial_theorem.html" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all group block">
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600">學習單位 3：二項式定理</h3>
+                <p class="text-sm text-slate-500">基礎知識模塊</p>
+            </a>
+
+            <!-- Unit 4 (The provided artifact) -->
+            <a href="topics/unit_04_further_trig.html" class="bg-indigo-50 p-6 rounded-xl border border-indigo-200 shadow-sm hover:shadow-md hover:border-indigo-500 transition-all group block">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-bold text-indigo-900 group-hover:text-indigo-600">學習單位 4：續三角函數</h3>
+                    <span class="bg-indigo-600 text-white text-xs px-2 py-1 rounded">已上線</span>
+                </div>
+                <p class="text-sm text-indigo-500 mb-4">基礎知識模塊</p>
+                <div class="flex gap-2">
+                    <span class="text-xs bg-white text-indigo-600 border border-indigo-200 px-2 py-1 rounded-full">和差角公式</span>
+                    <span class="text-xs bg-white text-indigo-600 border border-indigo-200 px-2 py-1 rounded-full">倍角公式</span>
+                </div>
+            </a>
+
+            <!-- Unit 5 -->
+            <a href="topics/unit_05_intro_to_e.html" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all group block">
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600">學習單位 5：e 的簡介</h3>
+                <p class="text-sm text-slate-500">基礎知識模塊</p>
+            </a>
+
+            <!-- Unit 6 -->
+            <a href="topics/unit_06_limits.html" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all group block">
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600">學習單位 6：極限</h3>
+                <p class="text-sm text-slate-500">微積分模塊</p>
+            </a>
+
+            <!-- Unit 7 -->
+            <a href="topics/unit_07_differentiation.html" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all group block">
+                <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600">學習單位 7：求導法</h3>
+                <p class="text-sm text-slate-500">微積分模塊</p>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 mt-12 border-t border-slate-800 text-center text-xs">
+        <p class="max-w-7xl mx-auto px-4">
+            M2 代數與微積分 專科自學平台 &copy; 2026.
+        </p>
+    </footer>
+
+</body>
+</html>
