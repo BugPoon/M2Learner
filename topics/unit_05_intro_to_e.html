@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M2 學習單位：極限及數 e 互動學習平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+      loadProgress();
+      // 初始化工具的圖形
+      setTimeout(drawGraph, 200);
+    });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #818cf8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <header class="bg-gradient-to-r from-blue-700 via-blue-800 to-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white text-blue-700 p-2 rounded-lg font-bold text-xl shadow-inner">M2</div>
+                    <div>
+                        <h1 class="text-lg font-bold leading-none">極限及數 e</h1>
+                        <p class="text-xs text-blue-200">Limits and the number e</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('concept')" id="tab-btn-concept" class="tab-btn px-3 py-2 rounded-md text-sm font-medium bg-blue-900 text-white transition-all">📖 核心概念</button>
+                    <button onclick="switchTab('tool')" id="tab-btn-tool" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📈 互動工具</button>
+                    <button onclick="switchTab('practice')" id="tab-btn-practice" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📝 互動題庫</button>
+                    <button onclick="switchTab('mistake')" id="tab-btn-mistake" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">⚠️ 避坑與自檢</button>
+                </nav>
+            </div>
+        </div>
+        <div class="flex md:hidden bg-blue-900 border-t border-blue-800 overflow-x-auto justify-around text-xs custom-scrollbar">
+            <button onclick="switchTab('concept')" id="mob-tab-btn-concept" class="mob-tab-btn flex-1 py-3 text-center text-white font-medium bg-blue-950">概念</button>
+            <button onclick="switchTab('tool')" id="mob-tab-btn-tool" class="mob-tab-btn flex-1 py-3 text-center text-blue-200 font-medium hover:bg-blue-950">工具</button>
+            <button onclick="switchTab('practice')" id="mob-tab-btn-practice" class="mob-tab-btn flex-1 py-3 text-center text-blue-200 font-medium hover:bg-blue-950">題庫</button>
+            <button onclick="switchTab('mistake')" id="mob-tab-btn-mistake" class="mob-tab-btn flex-1 py-3 text-center text-blue-200 font-medium hover:bg-blue-950">自檢</button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        
+        <section id="tab-content-concept" class="tab-content block space-y-8 animate-fadeIn">
+            
+            <div class="bg-amber-50 rounded-2xl p-6 shadow-sm border border-amber-200 space-y-4">
+                <h3 class="text-lg font-bold text-amber-900"><i class="fa-solid fa-clock-rotate-left mr-2"></i>重溫知識 (Review)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-amber-800">
+                    <div>
+                        <p class="font-semibold mb-2">📌 指數轉換法則 (Index Laws)</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>$a^m \times a^n = a^{m+n}$</li>
+                            <li>$(a^m)^n = a^{mn}$</li>
+                            <li>$a^{-n} = \frac{1}{a^n}$</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">📌 對數恆等式 (Log Identities)</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>$\log_a(xy) = \log_a x + \log_a y$</li>
+                            <li>$\log_a(\frac{x}{y}) = \log_a x - \log_a y$</li>
+                            <li>$\log_a(x^n) = n\log_a x$</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-600 pl-3">核心概念 A：極限 (Limit)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-slate-900">極限的概念</h4>
+                    <p class="text-slate-600 text-sm mt-2">當變量 $x$ 無限趨近於 $a$ 時，函數 $f(x)$ 趨向的數值 $L$。<br>記為：$$\lim_{x \to a} f(x) = L$$</p>
+                    <p class="text-xs text-slate-400 mt-2">注意：$f(a)$ 未必等於 $L$，極限探討的是「趨近過程」。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-slate-900">基本運算法則</h4>
+                    <ul class="text-slate-600 text-sm mt-2 space-y-2">
+                        <li>和/差：$\lim [f(x) \pm g(x)] = \lim f(x) \pm \lim g(x)$</li>
+                        <li>積/商：$\lim [f(x)g(x)] = \lim f(x) \cdot \lim g(x)$</li>
+                        <li>複合函數：$\lim f(g(x)) = f(\lim g(x))$ (若 $f$ 連續)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-slate-900">無限大極限</h4>
+                    <p class="text-slate-600 text-sm mt-2">當 $x \to \infty$ 時，處理有理函數的技巧是：<strong>分子分母同除以 $x$ 的最高次方</strong>。</p>
+                    <p class="text-sm mt-2 bg-blue-50 text-blue-800 p-2 rounded">
+                        $\lim_{x \to \infty} \frac{1}{x^n} = 0 \quad (n > 0)$
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-emerald-500 pl-3">核心概念 B：數 e 及 Natural Log</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-emerald-800">數 $e$ 的定義</h4>
+                    <p class="text-slate-600 text-sm mt-2">
+                        $e$ 是一個無理數，約等於 $2.71828$。它的嚴格極限定義為：
+                        $$e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n$$
+                        或當 $x \to 0$ 時：
+                        $$e = \lim_{x \to 0} (1 + x)^{\frac{1}{x}}$$
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-emerald-800">核心極限恆等式 (必背)</h4>
+                    <p class="text-slate-600 text-sm mt-2 space-y-3">
+                        處理三角與指數的 $\frac{0}{0}$ 型極限時，必須湊出以下形式：
+                        <span class="block bg-slate-50 p-2 rounded border border-slate-200">
+                            1. $\lim_{x \to 0} \frac{\sin x}{x} = 1$
+                        </span>
+                        <span class="block bg-slate-50 p-2 rounded border border-slate-200">
+                            2. $\lim_{x \to 0} \frac{e^x - 1}{x} = 1$
+                        </span>
+                        <span class="block bg-slate-50 p-2 rounded border border-slate-200">
+                            3. $\lim_{x \to 0} \frac{\ln(1+x)}{x} = 1$
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-content-tool" class="tab-content hidden space-y-8 animate-fadeIn">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-blue-600"></i> 指數與對數圖象
+                    </h3>
+                    <p class="text-xs text-slate-500">調整底數 $a$ 的大小，觀察指數函數 $y = a^x$ 與對數函數 $y = \log_a(x)$ 之間的幾何對稱性。</p>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-medium text-slate-700">
+                            <span>底數 $a$</span>
+                            <span class="text-blue-600 font-bold" id="val-a">2.7</span>
+                        </div>
+                        <input type="range" id="input-a" min="1.1" max="5.0" step="0.1" value="2.7" oninput="drawGraph()" class="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <p class="text-xs text-emerald-600 font-semibold mt-2">💡 提示：當 $a \approx 2.7$ 時，即為自然底數 $e$ 的圖象 ($y=e^x$ 與 $y=\ln x$)。</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3 mt-4">
+                        <p class="text-sm font-bold text-slate-700">觀察重點：</p>
+                        <ul class="text-xs text-slate-600 list-disc pl-4 space-y-1">
+                            <li>紅色線為 $y = a^x$，必定通過 $(0, 1)$。</li>
+                            <li>藍色線為 $y = \log_a(x)$，必定通過 $(1, 0)$。</li>
+                            <li>虛線為 $y = x$，紅藍兩線互為反函數，沿著虛線完美對稱！</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-slate-900">即時圖象生成</h3>
+                        <div class="flex gap-3 text-xs font-medium">
+                            <span class="text-red-500">── $y = a^x$</span>
+                            <span class="text-blue-500">── $y = \log_a(x)$</span>
+                        </div>
+                    </div>
+                    <div class="relative w-full overflow-hidden border border-slate-200 rounded-xl bg-slate-50">
+                        <canvas id="mathCanvas" width="600" height="400" class="w-full h-auto bg-transparent"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-content-practice" class="tab-content hidden space-y-6 animate-fadeIn">
+            <div class="flex space-x-2 border-b border-slate-200 pb-px overflow-x-auto">
+                <button onclick="switchLevel('l1')" id="level-btn-l1" class="level-btn py-2 px-4 font-semibold text-sm border-b-2 border-blue-600 text-blue-600 transition-all whitespace-nowrap">🟢 Level 1 入門題 (1-5)</button>
+                <button onclick="switchLevel('l2')" id="level-btn-l2" class="level-btn py-2 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-all whitespace-nowrap">🟡 Level 2 進階題 (6-10)</button>
+                <button onclick="switchLevel('l3')" id="level-btn-l3" class="level-btn py-2 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-all whitespace-nowrap">🔴 Level 3 挑戰題 (11-15)</button>
+                <button onclick="switchLevel('l4')" id="level-btn-l4" class="level-btn py-2 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-all whitespace-nowrap">🔥 Level 4 超階題 (16-18)</button>
+            </div>
+
+            <div id="level-content-l1" class="level-pane space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 1 題 / 直接代入法</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 2} (3x^2 - 4x + 1)$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-1')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs hover:bg-blue-100">💡 提示</button>
+                        <button onclick="toggleSolution('s-1')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs hover:bg-blue-700">🔑 解答</button>
+                    </div>
+                    <div id="h-1" class="hidden p-3 bg-amber-50 rounded-lg text-sm">直接將 $x=2$ 代入多項式。</div>
+                    <div id="s-1" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ = 3(2)^2 - 4(2) + 1 = 12 - 8 + 1 = 5 $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 2 題 / 因式分解約簡</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 3} \frac{x^2 - 9}{x - 3}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-2')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-2')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-2" class="hidden p-3 bg-amber-50 rounded-lg text-sm">分子是平方差 $(x^2 - 3^2)$，將其因式分解後與分母約掉。</div>
+                    <div id="s-2" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 3} \frac{(x-3)(x+3)}{x-3} = \lim_{x \to 3} (x+3) = 3+3 = 6 $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 3 題 / 無限大極限</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to \infty} \frac{4x - 1}{2x + 3}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-3')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-3')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-3" class="hidden p-3 bg-amber-50 rounded-lg text-sm">分子與分母同時除以最高次方 $x$。</div>
+                    <div id="s-3" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to \infty} \frac{4 - \frac{1}{x}}{2 + \frac{3}{x}} = \frac{4 - 0}{2 + 0} = 2 $$
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 4 題 / 三角極限</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 0} \frac{\sin 5x}{x}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-4')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-4')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-4" class="hidden p-3 bg-amber-50 rounded-lg text-sm">湊出 $\lim_{\theta \to 0} \frac{\sin \theta}{\theta} = 1$ 的形式，分子分母同乘 5。</div>
+                    <div id="s-4" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 0} \left( \frac{\sin 5x}{5x} \cdot 5 \right) = 1 \cdot 5 = 5 $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">第 5 題 / $e$ 的恆等式</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 0} \frac{e^{3x} - 1}{x}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-5')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-5')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-5" class="hidden p-3 bg-amber-50 rounded-lg text-sm">利用 $\lim_{u \to 0}\frac{e^u-1}{u}=1$，將分母湊成 $3x$。</div>
+                    <div id="s-5" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 0} \left( \frac{e^{3x} - 1}{3x} \cdot 3 \right) = 1 \cdot 3 = 3 $$
+                    </div>
+                </div>
+            </div>
+
+            <div id="level-content-l2" class="level-pane hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 6 題 / 根式有理化</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 4} \frac{\sqrt{x} - 2}{x - 4}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-6')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-6')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-6" class="hidden p-3 bg-amber-50 rounded-lg text-sm">分子與分母同乘以「共軛根式」$(\sqrt{x}+2)$ 以消除分子的根號。</div>
+                    <div id="s-6" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 4} \frac{(\sqrt{x}-2)(\sqrt{x}+2)}{(x-4)(\sqrt{x}+2)} = \lim_{x \to 4} \frac{x-4}{(x-4)(\sqrt{x}+2)} = \lim_{x \to 4} \frac{1}{\sqrt{x}+2} = \frac{1}{4} $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 7 題 / 綜合應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to \infty} \frac{5x^3 - 2x + 1}{2x^3 + 4x^2}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-7')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-7')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-7" class="hidden p-3 bg-amber-50 rounded-lg text-sm">分子與分母都除以x項最大的指數 ($x^3$)</div>
+                    <div id="s-7" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to \infty} \frac{5x^3 - 2x + 1}{2x^3 + 4x^2} = \lim_{x \to \infty} \frac{5 - \frac{2}{x^2} + \frac{1}{x^3}}{2 + \frac{4}{x}} = \frac{5}{2} $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 8 題 / 綜合應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 0} \frac{\sin 4x}{\sin 2x}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-8')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-8')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-8" class="hidden p-3 bg-amber-50 rounded-lg text-sm">考慮$\frac{\sin y}{y} = 1$</div>
+                    <div id="s-8" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$  $\lim_{x \to 0} \frac{\sin 4x}{4x} \cdot \frac{2x}{\sin 2x} \cdot \frac{4x}{2x} = 2 $$
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 9 題 / 綜合應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 0} \frac{e^{2x} - 1}{\sin 3x}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-9')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-9')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-9" class="hidden p-3 bg-amber-50 rounded-lg text-sm">考慮$\lim_{x \to 0} \frac{\sin y}{y} = 1$ 及 $\lim_{x \to 0} \frac{e^x - 1}{x} = 1$</div>
+                    <div id="s-9" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 0} $\frac{e^{2x}-1}{2x} \cdot \frac{3x}{\sin 3x} \cdot \frac{2x}{3x} = \frac{2}{3} $$
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full">第 10 題 / 綜合應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to \infty} \left(1 + \frac{1}{3x}\right)^{2x}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-10')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-10')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-10" class="hidden p-3 bg-amber-50 rounded-lg text-sm">$$e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n$$</div>
+                    <div id="s-10" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$  \lim_{x \to \infty} \left(1 + \frac{1}{3x}\right)^{2x} = \lim_{x \to \infty} \left[\left(1 + \frac{1}{3x}\right)^{3x}\right]^{\frac{2}{3}} = e^{\frac{2}{3}} $$
+                    </div>
+                </div>
+            </div>
+
+            <div id="level-content-l3" class="level-pane hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 11 題 / 三角倍角公式</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 0} \frac{1 - \cos 2x}{x^2}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-11')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-11')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-11" class="hidden p-3 bg-amber-50 rounded-lg text-sm">運用 M2 的倍角公式 $\cos 2x = 1 - 2\sin^2 x$。</div>
+                    <div id="s-11" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 0} \frac{1 - (1 - 2\sin^2 x)}{x^2} = \lim_{x \to 0} \frac{2\sin^2 x}{x^2} = 2 \left(\lim_{x \to 0}\frac{\sin x}{x}\right)^2 = 2(1)^2 = 2 $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 12 題 / 挑戰應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 1} \frac{x^3 - 1}{x^2 - 1}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-12')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-12')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-12" class="hidden p-3 bg-amber-50 rounded-lg text-sm">因式分解。</div>
+                    <div id="s-12" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 1} \frac{(x-1)(x^2+x+1)}{(x-1)(x+1)} = \lim_{x \to 1} \frac{x^2+x+1}{(x+1)} = \frac{3}{2} $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 13 題 / 挑戰應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to \frac{\pi}{2}} \frac{\cos x}{x - \frac{\pi}{2}}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-13')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-13')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-13" class="hidden p-3 bg-amber-50 rounded-lg text-sm">代換。</div>
+                    <div id="s-13" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ y = x - \frac{\pi}{2}$$ <br>
+                        $$ \lim_{y \to 0} \frac{\cos (y + \frac{\pi}{2})}{y} = \lim_{y \to 0} \frac{-\sin y}{y} = -1 $$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 14 題 / 挑戰應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to \infty} \left(\sqrt{x^2 + 4x} - x\right)$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-14')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-14')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-14" class="hidden p-3 bg-amber-50 rounded-lg text-sm">平分差恆等式。</div>
+                    <div id="s-14" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to \infty} \left(\sqrt{x^2 + 4x} - x\right) = \lim_{x \to \infty} \frac{\left(\sqrt{x^2 + 4x} - x\right)(\sqrt{x^2+4x}+x)}{\sqrt{x^2+4x}+x}$$ <br>
+                        $$ = \lim_{x \to \infty} \frac {x^2 + 4x - x^2}{\sqrt{x^2+4x}+x} = \lim_{x \to \infty} \frac {4x}{\sqrt{x^2+4x}+x}$$ <br>
+                        $$ = \lim_{x \to \infty} \frac {4}{\sqrt{1+\frac{4}{x}}+1} = \frac {4}{\sqrt{1}+1}$$ <br>
+                        $$ = \frac{4}{1+1} = 2$$
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <span class="px-2.5 py-0.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-full">第 15 題 / 挑戰應用</span>
+                    <h4 class="text-base font-bold">求 $\lim_{x \to 0} \frac{\ln(1 + 4x)}{x}$ 的值。</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-15')" class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">💡 提示</button>
+                        <button onclick="toggleSolution('s-15')" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs">🔑 解答</button>
+                    </div>
+                    <div id="h-15" class="hidden p-3 bg-amber-50 rounded-lg text-sm">湊出公式。</div>
+                    <div id="s-15" class="hidden p-4 bg-slate-50 border rounded-lg text-sm">
+                        $$ \lim_{x \to 0} \frac{\ln(1+4x)}{4x} \cdot 4 = 4 $$
+                    </div>
+                </div>
+            </div>
+
+            <div id="level-content-l4" class="level-pane hidden space-y-6">
+                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg space-y-4 text-white">
+                    <span class="px-2.5 py-0.5 bg-red-600 text-white text-xs font-bold rounded-full">超階題 (16)</span>
+                    <h4 class="text-base font-bold text-red-200">
+                        $\lim_{x \to 0} \frac{e^{x^2} - \cos x}{x^2}$<br><br>
+                    </h4>
+                    <button onclick="toggleSolution('h-16-18')" class="px-3 py-1.5 bg-slate-700 border border-slate-600 text-white rounded-lg text-xs hover:bg-slate-600">💡 提示</button>
+                    <button onclick="toggleSolution('s-16-18')" class="px-3 py-1.5 bg-slate-700 border border-slate-600 text-white rounded-lg text-xs hover:bg-slate-600">🔑 解答</button>
+                    <div id="h-16-18" class="hidden p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm space-y-4">
+                        拆項技巧 (加減 1)
+                    </div>
+                    <div id="s-16-18" class="hidden p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm space-y-4">
+                        <p>拆項技巧 (加減 1)：<br>
+                        $\lim_{x \to 0} \left( \frac{e^{x^2}-1}{x^2} + \frac{1-\cos x}{x^2} \right) = 1 + \frac{1}{2} = \frac{3}{2}$。</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg space-y-4 text-white">
+                    <span class="px-2.5 py-0.5 bg-red-600 text-white text-xs font-bold rounded-full">超階題 (17)</span>
+                    <h4 class="text-base font-bold text-red-200">$\lim_{x \to \infty} x \ln\left(\frac{x+2}{x-2}\right)$</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-17')" class="px-3 py-1.5 bg-slate-700 border border-slate-600 text-white rounded-lg text-xs hover:bg-slate-600">💡 提示</button>
+                        <button onclick="toggleSolution('s-17')" class="px-3 py-1.5 bg-slate-700 border border-slate-600 text-white rounded-lg text-xs hover:bg-slate-600">🔑 解答</button>
+                    </div>
+                    <div id="h-17" class="hidden p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm space-y-4">對數性質與 e 定義。</div>
+                    <div id="s-17" class="hidden p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm space-y-4">
+                        $$ \lim_{x \to 0} \ln\left(\frac{1+2/x}{1-2/x}\right)^x = \ln\left(\frac{e^2}{e^{-2}}\right) = \ln(e^4) = 4 $$
+                    </div>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg space-y-4 text-white">
+                    <span class="px-2.5 py-0.5 bg-red-600 text-white text-xs font-bold rounded-full">超階題 (18)</span>
+                    <h4 class="text-base font-bold text-red-200">$\lim_{x \to e} \frac{\ln x - 1}{x - e}$</h4>
+                    <div class="flex gap-2">
+                        <button onclick="toggleHint('h-18')" class="px-3 py-1.5 bg-slate-700 border border-slate-600 text-white rounded-lg text-xs hover:bg-slate-600">💡 提示</button>
+                        <button onclick="toggleSolution('s-18')" class="px-3 py-1.5 bg-slate-700 border border-slate-600 text-white rounded-lg text-xs hover:bg-slate-600">🔑 解答</button>
+                    </div>
+                    <div id="h-18" class="hidden p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm space-y-4">代換法，令 $y = \frac{x}{e} - 1 \implies x = e(1+y)$</div>
+                    <div id="s-18" class="hidden p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm space-y-4">
+                        $$ \lim_{y \to 0} \frac{\ln(e(1+y)) - 1}{ey} = \lim_{y \to 0} \frac{\ln e + \ln(1+y) - 1}{ey} = \frac{1}{e}\lim_{y \to 0} \frac{\ln(1+y)}{y} = \frac{1}{e} $$
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-content-mistake" class="tab-content hidden space-y-8 animate-fadeIn">
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                <h3 class="text-xl font-bold text-rose-600 flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> 常犯錯誤避坑指南
+                </h3>
+                <div class="space-y-4 text-sm text-slate-700">
+                    <div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-lg">
+                        <strong>❌ 錯誤 1：見到 $\frac{0}{0}$ 就寫「極限不存在」</strong><br>
+                        <span class="text-slate-500">正確：$\frac{0}{0}$ 代表不定型（Indeterminate form），必須進行因式分解、有理化或套用公式來尋找真實極限！</span>
+                    </div>
+                    <div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-lg">
+                        <strong>❌ 錯誤 2：亂套用三角極限公式 $\lim_{x \to \infty} \frac{\sin x}{x} = 1$</strong><br>
+                        <span class="text-slate-500">正確：公式前提是 $x \to 0$。如果 $x \to \infty$，由於 $\sin x$ 介於 $-1$ 與 $1$ 之間，除以無限大，極限其實是 $0$。</span>
+                    </div>
+                    <div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-lg">
+                        <strong>❌ 錯誤 3：中途放棄寫 $\lim$ 符號</strong><br>
+                        <span class="text-slate-500">正確：在未完全代入數值消去變數前，等號右邊的每一行開頭都必須寫明 $\lim_{x \to a}$，否則 DSE 考試會被扣表達分數 (PP-1)。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-slate-900">自我反思檢核表 (本地進度存檔)</h3>
+                    <div class="text-right">
+                        <div class="text-sm font-bold text-blue-600 mb-1" id="progress-text">0%</div>
+                        <div class="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-blue-600 transition-all duration-500 w-0"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <label class="flex items-start space-x-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                        <input type="checkbox" id="chk1" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我明白極限的基本代入法與趨近概念。</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                        <input type="checkbox" id="chk2" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我能熟練運用因式分解與有理化處理 $\frac{0}{0}$ 型極限。</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                        <input type="checkbox" id="chk3" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我記住了 $\lim_{x\to0} \frac{\sin x}{x}=1$ 及 $\lim_{x\to0} \frac{e^x-1}{x}=1$ 並能靈活運用。</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                        <input type="checkbox" id="chk4" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我理解 $e$ 的定義式，並能處理無限大趨近的題型。</span>
+                    </label>
+                    <label class="flex items-start space-x-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                        <input type="checkbox" id="chk5" onchange="saveProgress()" class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                        <span class="text-sm text-slate-700">我清楚知道指數 $e^x$ 與對數 $\ln x$ 在圖象上是以 $y=x$ 為對稱軸的逆函數。</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-content-' + tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-blue-900', 'text-white');
+                el.classList.add('text-blue-100');
+            });
+            document.getElementById('tab-btn-' + tabId).classList.add('bg-blue-900', 'text-white');
+            document.getElementById('tab-btn-' + tabId).classList.remove('text-blue-100');
+
+            document.querySelectorAll('.mob-tab-btn').forEach(el => {
+                el.classList.remove('bg-blue-950', 'text-white');
+                el.classList.add('text-blue-200');
+            });
+            document.getElementById('mob-tab-btn-' + tabId).classList.add('bg-blue-950', 'text-white');
+            document.getElementById('mob-tab-btn-' + tabId).classList.remove('text-blue-200');
+
+            if(tabId === 'tool') setTimeout(drawGraph, 50);
+        }
+
+        // Level Switcher for Practice
+        function switchLevel(level) {
+            document.querySelectorAll('.level-pane').forEach(el => el.classList.add('hidden'));
+            document.getElementById('level-content-' + level).classList.remove('hidden');
+            
+            document.querySelectorAll('.level-btn').forEach(el => {
+                el.classList.remove('border-blue-600', 'text-blue-600');
+                el.classList.add('border-transparent', 'text-slate-500');
+            });
+            document.getElementById('level-btn-' + level).classList.add('border-blue-600', 'text-blue-600');
+            document.getElementById('level-btn-' + level).classList.remove('border-transparent', 'text-slate-500');
+        }
+
+        // Toggle Helpers
+        function toggleHint(id) { document.getElementById(id).classList.toggle('hidden'); }
+        function toggleSolution(id) { document.getElementById(id).classList.toggle('hidden'); }
+
+        // Local Storage for Checklist
+        function saveProgress() {
+            const checks = ['chk1', 'chk2', 'chk3', 'chk4', 'chk5'];
+            let count = 0;
+            checks.forEach(id => {
+                const checked = document.getElementById(id).checked;
+                localStorage.setItem('m2-limit-' + id, checked);
+                if(checked) count++;
+            });
+            const pct = Math.round((count / checks.length) * 100);
+            document.getElementById('progress-text').innerText = `${pct}%`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+        function loadProgress() {
+            const checks = ['chk1', 'chk2', 'chk3', 'chk4', 'chk5'];
+            checks.forEach(id => {
+                if(localStorage.getItem('m2-limit-' + id) === 'true') {
+                    document.getElementById(id).checked = true;
+                }
+            });
+            saveProgress();
+        }
+
+        // Interactive Graph Tool
+        function drawGraph() {
+            const canvas = document.getElementById('mathCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            ctx.clearRect(0, 0, width, height);
+            
+            const scale = 40; 
+            const originX = width / 2;
+            const originY = height / 2;
+            
+            // Draw Grid
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.lineWidth = 1;
+            for(let i=0; i<width; i+=scale) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
+            for(let i=0; i<height; i+=scale) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
+            
+            // Draw Axes
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0,originY); ctx.lineTo(width,originY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(originX,0); ctx.lineTo(originX,height); ctx.stroke();
+            
+            // Get slider value
+            const a = parseFloat(document.getElementById('input-a').value);
+            document.getElementById('val-a').innerText = a.toFixed(1);
+            
+            // Draw y = a^x (Red)
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for(let px=0; px<width; px++) {
+                let x = (px - originX)/scale;
+                let y = Math.pow(a, x);
+                let py = originY - y*scale;
+                if(px===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+            }
+            ctx.stroke();
+            
+            // Draw y = log_a(x) (Blue)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.beginPath();
+            let started = false;
+            for(let px=originX+1; px<width; px++) {
+                let x = (px - originX)/scale;
+                let y = Math.log(x)/Math.log(a);
+                let py = originY - y*scale;
+                if(!started) { ctx.moveTo(px,py); started=true; }
+                else { ctx.lineTo(px,py); }
+            }
+            ctx.stroke();
+            
+            // Draw y = x (Green dashed)
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5,5]);
+            ctx.beginPath();
+            ctx.moveTo(0, originY + originX);
+            ctx.lineTo(width, originY - (width - originX));
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+    </script>
+</body>
+</html>
