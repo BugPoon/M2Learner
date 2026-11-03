@@ -8,24 +8,13 @@
     <!-- KaTeX for Beautiful Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="initKaTeX()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
     <!-- Chart.js & Math.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script>
-    function initKaTeX() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                { left: "$$", right: "$$", display: true },
-                { left: "\\(", right: "\\)", display: false },
-                { left: "$", right: "$", display: false }
-            ]
-        });
-    }
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; }
@@ -71,7 +60,7 @@
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex space-x-1">
                     <button onclick="switchTab('concept')" id="tab-btn-concept" class="tab-btn px-3 py-2 rounded-md text-sm font-medium bg-blue-900 text-white transition-all">📖 核心概念</button>
-                    <button onclick="switchTab('tool')" id="tab-btn-tool" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📈 導數變化模擬器</button>
+                    <button onclick="switchTab('tool')" id="tab-btn-tool" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📈 微分實驗室</button>
                     <button onclick="switchTab('practice')" id="tab-btn-practice" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">📝 互動題庫</button>
                     <button onclick="switchTab('mistake')" id="tab-btn-mistake" class="tab-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600 hover:text-white text-blue-100 transition-all">⚠️ 避坑與自檢</button>
                 </nav>
@@ -210,7 +199,7 @@
             <div class="app-shell">
                 <div class="workspace">
                     <header class="mb-8">
-                        <p class="eyebrow mb-3">THE CALCULUS LAB / 微積分實驗室 (動態運算版)</p>
+                        <p class="eyebrow mb-3">THE CALCULUS LAB / 微積分實驗室</p>
                         <h1 class="text-3xl font-bold leading-tight mb-3 text-white">看見每一步的求導。</h1>
                         <p class="muted max-w-3xl">輸入任何連續函數，系統將自動解析其結構，判定求導法則並視覺化切線變化。</p>
                     </header>
@@ -594,11 +583,11 @@
             if (tabId === 'tool') {
                 setTimeout(() => {
                     resizeCanvas();
-                    initMathOnElement(document.getElementById('tab-content-tool'));
+//                    initMathOnElement(document.getElementById('tab-content-tool'));
                 }, 50);
             } else if (tabId === 'practice') {
                 setTimeout(() => {
-                    initMathOnElement(document.getElementById('tab-content-practice'));
+//                    initMathOnElement(document.getElementById('tab-content-practice'));
                 }, 50);
             }
         }
@@ -619,7 +608,7 @@
             activeBtn.classList.add('border-blue-600', 'text-blue-600');
 
             setTimeout(() => {
-                initMathOnElement(document.getElementById(`level-content-${levelId}`));
+//                initMathOnElement(document.getElementById(`level-content-${levelId}`));
             }, 50);
         }
 
@@ -627,7 +616,7 @@
             const el = document.getElementById(solId);
             if (el.classList.contains('hidden')) {
                 el.classList.remove('hidden');
-                initMathOnElement(el);
+//                initMathOnElement(el);
             } else {
                 el.classList.add('hidden');
             }
@@ -646,7 +635,7 @@
                 icon.className = "fa-solid fa-chevron-down text-slate-400";
             } else {
                 icon.className = "fa-solid fa-chevron-up text-slate-400";
-                initMathOnElement(content);
+//                initMathOnElement(content);
             }
         }
 
@@ -990,6 +979,7 @@
         }
 
         window.onload = function() {
+            initKaTeX();
             loadProgress();
             setTimeout(() => { loadMathFunction('x^2 * sin(x)'); }, 500);
         };
