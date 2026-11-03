@@ -269,6 +269,31 @@
                             <div class="mt-5 pt-5 border-t" style="border-color:var(--line)">
                                 <label class="block font-semibold mb-3 text-white">移動切點 (x 值)</label> 
                                 <input id="x-slider" type="range" min="-3" max="3" step="0.01" value="1">
+                                <!-- 【新增位置】：圖表視角與範圍控制面板 -->
+                                <div class="mt-4 p-3 rounded-xl bg-[#101a24] border border-[#354553]">
+                                    <p class="text-xs text-[#gold] font-bold mb-2 text-[#f3c978]">📐 圖表視角範圍 (Axis Bounds)</p>
+                                    <div class="grid grid-cols-2 gap-2 text-xs text-white">
+                                        <div>
+                                            <label class="block text-[#afbec5] mb-1">X 軸範圍</label>
+                                            <div class="flex items-center gap-1">
+                                                <input type="number" id="xMin" value="-3" class="w-full bg-[#1d2a36] border border-[#50616d] rounded px-2 py-1 text-center">
+                                                <span>至</span>
+                                                <input type="number" id="xMax" value="3" class="w-full bg-[#1d2a36] border border-[#50616d] rounded px-2 py-1 text-center">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[#afbec5] mb-1">Y 軸範圍</label>
+                                            <div class="flex items-center gap-1">
+                                                <input type="number" id="yMin" value="-5" class="w-full bg-[#1d2a36] border border-[#50616d] rounded px-2 py-1 text-center">
+                                                <span>至</span>
+                                                <input type="number" id="yMax" value="5" class="w-full bg-[#1d2a36] border border-[#50616d] rounded px-2 py-1 text-center">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="updateChartBounds()" class="w-full mt-3 py-1.5 bg-[#243645] hover:bg-[#354553] border border-[#4a6170] text-white rounded text-xs font-semibold transition-colors">
+                                        套用軸線範圍
+                                    </button>
+                                </div>
                                 <div class="grid grid-cols-2 gap-3 mt-5">
                                     <div class="rounded-xl p-4" style="background:#132736">
                                         <p class="text-[#afbec5] text-xs mb-1">切點座標</p>
@@ -847,6 +872,7 @@
                 feedback(`成功解析！請在下方判斷並拖曳適用的規則積木。`, true);
                 
                 $('step-slider').value = 0;
+                autoCalculateBounds();
                 renderStep();
                 renderGraph();
             } catch (e) {
@@ -857,6 +883,54 @@
 
         function fmt(n) { return Math.abs(n)<0.0005 ? '0' : n.toFixed(3); }
 
+        // 1. 新增：自動計算與自動防呆的 Y 軸上下限
+        function autoCalculateBounds() {
+            let xMin = parseFloat($('xMin').value) || -3;
+            let xMax = parseFloat($('xMax').value) || 3;
+
+            if (xMin >= xMax) { xMin = -3; xMax = 3; $('xMin').value = -3; $('xMax').value = 3; }
+
+            // 更新 x-slider 的移動範圍，避免滑桿超出繪圖視角
+            $('x-slider').min = xMin;
+            $('x-slider').max = xMax;
+
+            let yVals = [];
+            const steps = 100;
+            for (let i = 0; i <= steps; i++) {
+                let xVal = xMin + (xMax - xMin) * (i / steps);
+                try {
+                    let yVal = compiledFunc.evaluate({ x: xVal });
+                    if (typeof yVal === 'number' && !isNaN(yVal) && isFinite(yVal)) {
+                        yVals.push(yVal);
+                    }
+                } catch(e) {}
+            }
+
+            if (yVals.length > 0) {
+                let yMin = Math.min(...yVals);
+                let yMax = Math.max(...yVals);
+                let padding = (yMax - yMin) * 0.15 || 1; // 預留 15% 邊距
+
+                // 鉗制過大數值（如奇點/漸近線）
+                let finalYMin = Math.max(-200, yMin - padding);
+                let finalYMax = Math.min(200, yMax + padding);
+
+                $('yMin').value = finalYMin.toFixed(1);
+                $('yMax').value = finalYMax.toFixed(1);
+            }
+        }
+
+        // 2. 新增：用家手動點擊「套用軸線範圍」時觸發
+        function updateChartBounds() {
+            let xMin = parseFloat($('xMin').value);
+            let xMax = parseFloat($('xMax').value);
+            if (xMin >= xMax) { alert("X 軸最小值必須小於最大值！"); return; }
+            
+            $('x-slider').min = xMin;
+            $('x-slider').max = xMax;
+            renderGraph();
+        }
+        
         function renderGraph() {
             if(!window.Chart || !compiledFunc) return;
             
@@ -865,26 +939,30 @@
             try {
                 y = compiledFunc.evaluate({x: x});
                 slope = compiledDeriv.evaluate({x: x});
-            } catch(e) { return; } // 防止特定 x 值（如 log(-1)）導致報錯
+            } catch(e) { return; }
 
             $('point-value').textContent = `(${fmt(x)}, ${fmt(y)})`;
             $('slope-value').textContent = fmt(slope);
             
+            // 讀取固定範圍
+            const xMin = parseFloat($('xMin').value) || -3;
+            const xMax = parseFloat($('xMax').value) || 3;
+            const yMin = parseFloat($('yMin').value) || -5;
+            const yMax = parseFloat($('yMax').value) || 5;
+
             // 產生曲線資料點
-            const range = 3;
             const pts = [];
-            for(let i=0; i<=100; i++){
-                const currX = -range + 2 * range * i / 100;
+            for(let i=0; i<=120; i++){
+                const currX = xMin + (xMax - xMin) * i / 120;
                 try {
                     const currY = compiledFunc.evaluate({x: currX});
-                    // 排除無效值或過大的漸近線干擾
-                    if(typeof currY === 'number' && !isNaN(currY) && Math.abs(currY) < 50) {
+                    if(typeof currY === 'number' && !isNaN(currY) && isFinite(currY)) {
                         pts.push({x: currX, y: currY});
                     }
                 } catch(e) {}
             }
 
-            const reach = range * 0.4;
+            const reach = (xMax - xMin) * 0.2;
             const sets = [
                 {label:'f(x)', data:pts, borderColor:'#71b9ff', borderWidth:3, pointRadius:0, showLine:true},
                 {label:'切線', data:[{x: x-reach, y: y-slope*reach}, {x: x+reach, y: y+slope*reach}], borderColor:'#f3c978', borderWidth:2, pointRadius:0, showLine:true, borderDash:[7,5]},
@@ -893,6 +971,11 @@
 
             if(chart) {
                 chart.data.datasets = sets;
+                // 強制固定刻度範圍，解決滑桿移動時坐標軸跳動的問題
+                chart.options.scales.x.min = xMin;
+                chart.options.scales.x.max = xMax;
+                chart.options.scales.y.min = yMin;
+                chart.options.scales.y.max = yMax;
                 chart.update('none');
             } else {
                 chart = new Chart($('function-chart'),{
@@ -901,8 +984,8 @@
                         responsive:true, maintainAspectRatio:false, animation:false,
                         plugins:{legend:{labels:{color:'#c9d7da',usePointStyle:true}}, tooltip:{callbacks:{label:c=>`(${fmt(c.parsed.x)}, ${fmt(c.parsed.y)})`}}},
                         scales:{
-                            x:{type:'linear', min:-range, max:range, grid:{color:'#354553'}, border:{color:'#607582'}, ticks:{color:'#aebfc7'}},
-                            y:{grid:{color:'#354553'}, border:{color:'#607582'}, ticks:{color:'#aebfc7'}}
+                            x:{type:'linear', min:xMin, max:xMax, grid:{color:'#354553'}, border:{color:'#607582'}, ticks:{color:'#aebfc7'}},
+                            y:{type:'linear', min:yMin, max:yMax, grid:{color:'#354553'}, border:{color:'#607582'}, ticks:{color:'#aebfc7'}}
                         }
                     }
                 });
